@@ -62,15 +62,5 @@ public class Jogos {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
-
-    public Jogos(String nomeJogo, String genero, String plataforma, String classificacao, String desenvolvedora, double preco, int quantidade) {
-        this.nomeJogo = nomeJogo;
-        this.genero = genero;
-        this.plataforma = plataforma;
-        this.classificacao = classificacao;
-        this.desenvolvedora = desenvolvedora;
-        this.preco = preco;
-        this.quantidade = quantidade;
-    }
     
 }
