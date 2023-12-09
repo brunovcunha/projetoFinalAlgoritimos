@@ -8,7 +8,8 @@ import java.util.Scanner;
 public class App {
   public static List<Jogos> jogosEstoque = new ArrayList<>();
   public static List<Venda> vendas = new ArrayList<>();
-  public static HashMap<Integer, List<Jogos>> jogosGenero = new HashMap<>();
+  public static List<Jogos> jogos = new ArrayList<>();
+  public static HashMap<String, List<Jogos>> jogosGenero = new HashMap<>();
 
   public static Scanner s = new Scanner(System.in);
 
@@ -24,14 +25,19 @@ public class App {
         "          |_|\n");
     Thread.sleep(2000);
 
+    //Alguns jogos para teste
     Jogos jogo01, jogo02, jogo03;
     jogo01 = new Jogos("God of War", "Ação", "PS4", "18+", "Santa Monica Studios", 59.99, 5);
-    jogo02 = new Jogos("The Lege of Zelda", "RPG", "Nintendo Switch", "10+", "Nintendo", 59.99, 5);
-    jogo03 = new Jogos("Super Marios World", "Plataforma", "Super Nintendo", "L", "Nintendo", 249.99, 5);
+    jogo02 = new Jogos("The Legend of Zelda", "RPG", "Nintendo Switch", "10+", "Nintendo", 59.99, 5);
+    jogo03 = new Jogos("Super Mario World", "Plataforma", "Super Nintendo", "L", "Nintendo", 249.99, 5);
 
     jogosEstoque.add(jogo01);
     jogosEstoque.add(jogo02);
     jogosEstoque.add(jogo03);
+
+    addJogoGenero(jogo01, jogo01.getGenero());
+    addJogoGenero(jogo02, jogo02.getGenero());
+    addJogoGenero(jogo03, jogo03.getGenero());
 
     menu();
   }
@@ -123,7 +129,7 @@ public class App {
     int menRelatorios = s.nextInt();
     switch (menRelatorios) {
       case 1:
-
+        jogosGenero();
         break;
 
       case 2:
@@ -152,7 +158,8 @@ public class App {
       System.out.print("Digite o nome: ");
       jogo.setNomeJogo(s.nextLine());
       System.out.print("Digite o gênero: ");
-      jogo.setGenero(s.nextLine());
+      String genero = s.nextLine();
+      jogo.setGenero(genero);
       System.out.print("Digite a plataforma: ");
       jogo.setPlataforma(s.nextLine());
       System.out.print("Digite a classificação: ");
@@ -165,6 +172,8 @@ public class App {
       jogo.setQuantidade(s.nextInt());
 
       jogosEstoque.add(jogo);
+    
+      addJogoGenero(jogo, genero);
 
       System.out.println("Deseja cadastrar um novo jogo?(s/n)");
       op = s.next();
@@ -173,6 +182,18 @@ public class App {
     menuEstoque();
   }
 
+  // Funcao responsavel por adcionar jogos pelo genero através de um map
+  public static void addJogoGenero(Jogos jogo, String genero){
+    if (jogosGenero.containsKey(genero)) {
+        jogosGenero.get(genero).add(jogo);
+    } else {
+        List<Jogos> jogosDoGenero = new ArrayList<>();
+        jogosDoGenero.add(jogo);
+        jogosGenero.put(genero, jogosDoGenero);
+    }
+  }
+
+  //Funcao responsavel pela escolha de remoção ou adição de jogos
   public static void gerenciarEstoque() {
     System.out.println("-----Gerenciar estoque-----");
     System.out.println("Digite 1 para adicionar ou 2 para remover (1/2)");
@@ -267,6 +288,7 @@ public class App {
     }
   }
 
+  //Funcao responsavel por remover quantidades de um jogo existente
   public static void removerJogo() {
     s.nextLine();
 
@@ -342,7 +364,7 @@ public class App {
     }
   }
 
-  // funcao responsavel por remover um jogo do estoque
+  // funcao responsavel por remover um jogo permanentemente do estoque
   public static void apagarJogo() {
     s.nextLine();
     String op = "s";
@@ -415,6 +437,7 @@ public class App {
     }
   }
 
+  //Funcao responsavel por cadastrar novas vendas
   public static void cadastrarVenda() {
     s.nextLine();
     Venda venda = new Venda();
@@ -459,6 +482,7 @@ public class App {
 
   }
 
+  //Funccao responsavel por alterar uma venda existente
   public static void alterarVenda() {
     s.nextLine();
     System.out.println("------");
@@ -540,6 +564,7 @@ public class App {
     menuVendas();
   }
 
+  //Funcao responsavel por remover uma venda existente
   public static void removerVenda() {
     s.nextLine();
     System.out.println("------");
@@ -577,6 +602,7 @@ public class App {
     menuVendas();
   }
 
+  //Funcao responsavel por listar as vendas existentes
   public static void listaVendas() {
     s.nextLine();
     System.out.println("t------");
@@ -597,6 +623,7 @@ public class App {
     menuRelatorios();
   }
 
+  //Lista jogos em estoque
   public static void listaEstoque() {
     s.nextLine();
     System.out.println("------");
@@ -609,4 +636,62 @@ public class App {
     }
     menuRelatorios();
   }
+
+  //Lista jogos pelo seu genero, através de um mapa
+  public static void jogosGenero(){
+    System.out.println("------");
+    System.out.println("Gêneros: ");
+    System.out.println("\t1- Ação");
+    System.out.println("\t2- Aventura");
+    System.out.println("\t3- RPG");
+    System.out.println("\t4- Corrida");
+    System.out.println("\t5- Terror");
+    System.out.println("\t6- Ficção");
+    System.out.println("\t7- Fantasia");
+    System.out.println("\t8- Plataforma");
+    System.out.println("\t9- Estratégia");
+    System.out.println("\t10- Simulação");
+    System.out.println("\t11- Esportes");
+    System.out.println("------");
+
+    System.out.println("Qual gênero deseja buscar?(id)");
+    int idGenero = s.nextInt();
+
+    s.nextLine();
+    String genero;
+
+    switch(idGenero){
+      case 1: genero = "Ação"; break;
+      case 2: genero = "Aventura"; break;
+      case 3: genero = "RPG"; break;
+      case 4: genero = "Corrida"; break;
+      case 5: genero = "Terror"; break;
+      case 6: genero = "Ficção"; break;
+      case 7: genero = "Fantasia"; break;
+      case 8: genero = "Plataforma"; break;
+      case 9: genero = "Estratégia"; break;
+      case 10: genero = "Simulação"; break;
+      case 11: genero = "Esportes"; break;
+      default: System.out.println("Opção inválida!"); return;
+    }
+
+    if(jogosGenero.containsKey(genero)){
+      System.out.println("Jogos do gênero " + genero + ": ");
+      for(Jogos jogo : jogosGenero.get(genero)){
+        System.out.println("\t" + jogo.getNomeJogo());
+      }
+    } else{
+      System.out.println("Não há jogos do gênero " + genero);
+    }
+    System.out.println();
+
+    System.out.println("Buscar novo gênero?(s/n)");
+    char op = s.next().charAt(0);
+
+    if(op == 's'){
+      jogosGenero();
+    } else{
+      return;
+  }
+}
 }
