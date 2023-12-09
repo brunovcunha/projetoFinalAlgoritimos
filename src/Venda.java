@@ -76,11 +76,8 @@ public class Venda {
         return valorTotal;
     }
 
-    public void setValorTotal() {
-        double valorTotal = 0;
-        for (Jogos jogo : jogos) {
-            valorTotal += jogo.getPreco() * jogo.getQuantidade();
-        }
+    public void setValorTotal(int unidadesVendidas, double preco) {
+        double valorTotal = unidadesVendidas * preco;
         this.valorTotal = valorTotal;
     }
 
@@ -91,5 +88,6 @@ public class Venda {
     public void setJogos(ArrayList<Jogos> jogos) {
         this.jogos = jogos;
     }
+
 
 }

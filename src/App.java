@@ -25,7 +25,7 @@ public class App {
     Thread.sleep(2000);
 
     Jogos jogo01;
-    jogo01 = new Jogos("God of War", "Ação", "PS4", "18+", "Santa Monica Studios", 59.99, 5);;
+    jogo01 = new Jogos("God of War", "Ação", "PS4", "18+", "Santa Monica Studios", 59.99, 5);
 
     jogosEstoque.add(jogo01);
     
@@ -440,7 +440,8 @@ public class App {
       System.out.println("Quantidade: ");
       venda.setUnidadesVendidas(s.nextInt());
       System.out.println("Valor total: ");
-      System.out.println(venda.getValorTotal());
+      venda.setValorTotal(venda.getUnidadesVendidas(), venda.getJogos().get(0).getPreco());
+      System.out.println("Valor total: " + venda.getValorTotal());
       System.out.println("Forma de pagamento: ");
       venda.setFormaPagamento(s.next());
       System.out.println("Status: ");
@@ -453,6 +454,85 @@ public class App {
 
     menuVendas();
     
+  }
+
+  public static void alterarVenda() {
+    s.nextLine();
+    System.out.println("------");
+    System.out.println("Vendas: ");
+    for (Venda venda : vendas) {
+      System.out.print(venda.getIdVenda() + " - ");
+      System.out.println(venda.getCliente());
+    }
+    System.out.println("------");
+
+    System.out.println("----Alterar Venda----");
+    System.out.print("Id da venda: ");
+    int idVenda = s.nextInt();
+    s.nextLine();
+    boolean encontrado = false;
+
+    for (Venda venda : vendas) {
+      if (venda.getIdVenda() == idVenda) {
+        encontrado = true;
+      }
+    }
+
+    if (!encontrado) {
+      System.out.println("Venda não encontrada");
+    } else {
+      System.out.println("------");
+
+      for (Venda venda : vendas) {
+        System.out.println("Alterar quantidade de jogos, quantidade: " + venda.getUnidadesVendidas());
+        System.out.println("Deseja remover ou adicionar jogos?(r/a)");
+
+        String escolha = s.nextLine();
+
+        if (escolha.equalsIgnoreCase("r")) {
+          System.out.println("Jogo: " + venda.getJogos().get(0).getNomeJogo());
+          ;
+          System.out.print("Remover quantas unidades? ");
+          int unidades = s.nextInt();
+
+          System.out.println("Remover: " + unidades + " unidades ?(s/n)");
+
+          char op = s.next().charAt(0);
+
+          if (op == 'n') {
+            System.out.println("Cancelado");
+            break;
+          } else {
+            venda.setUnidadesVendidas(venda.getUnidadesVendidas() - unidades);
+            System.out.println("Quantidade removida com sucesso!");
+            System.out.println("Nova quantidade: " + venda.getUnidadesVendidas());
+            break;
+          }
+        } else {
+          System.out.println("Jogo: " + venda.getJogos().get(0).getNomeJogo());
+          ;
+          System.out.print("Adicionar quantas unidades? ");
+          int unidades = s.nextInt();
+
+          System.out.println("Adicionar: " + unidades + " unidades ?(s/n)");
+
+          char op = s.next().charAt(0);
+
+          if (op == 'n') {
+            System.out.println("Cancelado");
+            break;
+          } else {
+            venda.setUnidadesVendidas(venda.getUnidadesVendidas() + unidades);
+            System.out.println("Quantidade adicionada com sucesso!");
+            System.out.println("Nova quantidade: " + venda.getUnidadesVendidas());
+            break;
+          }
+        }
+
+      }
+    }
+
+    menuVendas();
   }
   }
 
