@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class App {
   public static List<Jogos> jogosEstoque = new ArrayList<>();
   public static List<Venda> vendas = new ArrayList<>();
-  public static HashMap<String, List<Jogos>> jogosGenero = new HashMap<>();
+  public static HashMap<Integer, List<Jogos>> jogosGenero = new HashMap<>();
 
   public static Scanner s = new Scanner(System.in);
 
@@ -24,11 +24,15 @@ public class App {
         "          |_|\n");
     Thread.sleep(2000);
 
-    Jogos jogo01;
+    Jogos jogo01, jogo02, jogo03;
     jogo01 = new Jogos("God of War", "Ação", "PS4", "18+", "Santa Monica Studios", 59.99, 5);
+    jogo02 = new Jogos("The Lege of Zelda", "RPG", "Nintendo Switch", "10+", "Nintendo", 59.99, 5);
+    jogo03 = new Jogos("Super Marios World", "Plataforma", "Super Nintendo", "L", "Nintendo", 249.99, 5);
 
     jogosEstoque.add(jogo01);
-    
+    jogosEstoque.add(jogo02);
+    jogosEstoque.add(jogo03);
+
     menu();
   }
 
@@ -96,15 +100,15 @@ public class App {
     int menVendas = s.nextInt();
     switch (menVendas) {
       case 1:
-      cadastrarVenda();
+        cadastrarVenda();
         break;
 
       case 2:
-
+        alterarVenda();
         break;
 
       case 3:
-
+        removerVenda();
         break;
 
       case 4:
@@ -123,11 +127,11 @@ public class App {
         break;
 
       case 2:
-
+        listaVendas();
         break;
 
       case 3:
-
+        listaEstoque();
         break;
 
       case 4:
@@ -161,7 +165,6 @@ public class App {
       jogo.setQuantidade(s.nextInt());
 
       jogosEstoque.add(jogo);
-      jogosGenero.computeIfAbsent(jogo.getGenero(), k -> new ArrayList<>()).add(jogo);
 
       System.out.println("Deseja cadastrar um novo jogo?(s/n)");
       op = s.next();
@@ -422,38 +425,38 @@ public class App {
 
     for (Jogos jogo : jogosEstoque) {
       if (jogo.getNomeJogo().equalsIgnoreCase(nomeJogo)) {
-          venda.getJogos().add(jogo);
-          encontrado = true;
-          break;
+        venda.getJogos().add(jogo);
+        encontrado = true;
+        break;
       }
     }
-       
-    if(!encontrado) {
+
+    if (!encontrado) {
       System.out.println(nomeJogo + " não foi encontrado");
-    } else{
-      System.out.println("Id venda: ");
+    } else {
+      System.out.print("Id venda: ");
       venda.setIdVenda(s.nextInt());
-      System.out.println("Cliente: ");
+      System.out.print("Cliente: ");
       venda.setCliente(s.next());
-      System.out.println("Data da venda: ");
+      System.out.print("Data da venda: ");
       venda.setDataVenda(s.next());
-      System.out.println("Quantidade: ");
+      System.out.print("Quantidade: ");
       venda.setUnidadesVendidas(s.nextInt());
-      System.out.println("Valor total: ");
       venda.setValorTotal(venda.getUnidadesVendidas(), venda.getJogos().get(0).getPreco());
       System.out.println("Valor total: " + venda.getValorTotal());
-      System.out.println("Forma de pagamento: ");
+      System.out.print("Forma de pagamento: ");
       venda.setFormaPagamento(s.next());
-      System.out.println("Status: ");
+      System.out.print("Status: ");
       venda.setStatus(s.next());
+      System.out.println();
 
       vendas.add(venda);
       System.out.println("Venda cadastrada com sucesso!");
-      
+
     }
 
     menuVendas();
-    
+
   }
 
   public static void alterarVenda() {
@@ -468,7 +471,9 @@ public class App {
 
     System.out.println("----Alterar Venda----");
     System.out.print("Id da venda: ");
+
     int idVenda = s.nextInt();
+
     s.nextLine();
     boolean encontrado = false;
 
@@ -499,13 +504,13 @@ public class App {
 
           char op = s.next().charAt(0);
 
-          if (op == 'n') {
-            System.out.println("Cancelado");
-            break;
-          } else {
+          if (op == 's') {
             venda.setUnidadesVendidas(venda.getUnidadesVendidas() - unidades);
             System.out.println("Quantidade removida com sucesso!");
             System.out.println("Nova quantidade: " + venda.getUnidadesVendidas());
+            break;
+          } else {
+            System.out.println("Cancelado");
             break;
           }
         } else {
@@ -534,5 +539,74 @@ public class App {
 
     menuVendas();
   }
+
+  public static void removerVenda() {
+    s.nextLine();
+    System.out.println("------");
+    System.out.println("Vendas: ");
+
+    for (Venda venda : vendas) {
+      System.out.print(venda.getIdVenda() + " - ");
+      System.out.println(venda.getCliente());
+    }
+
+    System.out.println("Qual venda deseja remover?(id)");
+
+    int idVenda = s.nextInt();
+
+    for (Venda venda : vendas) {
+      if (venda.getIdVenda() == idVenda) {
+        System.out.println("------");
+        System.out.println("Deseja remover a venda" + venda.getIdVenda() + " ?(s/n)");
+
+        char op = s.next().charAt(0);
+
+        if (op == 's') {
+          vendas.remove(venda);
+          System.out.println("Venda removida com sucesso!");
+          break;
+        } else {
+          System.out.println("Operação cancelada!");
+        }
+      } else {
+        System.out.println("Venda não encontrada!");
+        break;
+      }
+    }
+
+    menuVendas();
   }
 
+  public static void listaVendas() {
+    s.nextLine();
+    System.out.println("t------");
+    System.out.println("Vendas: ");
+    for (Venda venda : vendas) {
+      System.out.println("\t------");
+      System.out.println("\t" + venda.getIdVenda() + " - " + venda.getCliente());
+      System.out.println("\tData venda: " + venda.getDataVenda());
+      System.out.println("\tJogos: " + venda.getJogos().get(0).getNomeJogo());
+      System.out.println("\tUnidades vendidas: " + venda.getUnidadesVendidas());
+      System.out.println("\tValor: " + venda.getValorTotal());
+      System.out.println("\tForma de pagamento: " + venda.getFormaPagamento());
+      System.out.println("\tValor total: " + venda.getValorTotal());
+      System.out.println("\tStatus: " + venda.getStatus());
+      System.out.println("\t------");
+    }
+
+    menuRelatorios();
+  }
+
+  public static void listaEstoque() {
+    s.nextLine();
+    System.out.println("------");
+    System.out.println("Estoque: ");
+    for (Jogos jogo : jogosEstoque) {
+      System.out.println("------");
+      System.out.println("\t" + jogo.getNomeJogo());
+      System.out.println("\tEstoque: " + jogo.getQuantidade());
+      System.out.println("------");
+    }
+    menuRelatorios();
+  }
+}
